@@ -5,8 +5,8 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/sclevine/agouti/matchers/internal"
-	"github.com/sclevine/agouti/matchers/internal/mocks"
+	. "github.com/yewno/agouti/matchers/internal"
+	"github.com/yewno/agouti/matchers/internal/mocks"
 )
 
 var _ = Describe("BooleanMatcher", func() {

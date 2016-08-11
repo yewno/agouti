@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 // PhantomJS returns an instance of a PhantomJS WebDriver.
@@ -24,6 +25,7 @@ func PhantomJS(options ...Option) *WebDriver {
 	if !defaultOptions.RejectInvalidSSL {
 		command = append(command, "--ignore-ssl-errors=true")
 	}
+	fmt.Printf("command %s\n", strings.Join(command, " "))
 	return NewWebDriver("http://{{.Address}}", command, options...)
 }
 

@@ -35,7 +35,7 @@ func (s *Service) Start(debug bool) error {
 		return errors.New("already running")
 	}
 
-	address, err := freeAddress()
+	address, err := freeAddress(debug)
 	if err != nil {
 		return fmt.Errorf("failed to locate a free port: %s", err)
 	}
@@ -51,6 +51,8 @@ func (s *Service) Start(debug bool) error {
 	}
 
 	if debug {
+		fmt.Printf("%+v\n", address)
+		fmt.Printf("command %+v\n", command)
 		command.Stdout = os.Stdout
 		command.Stderr = os.Stderr
 	}
@@ -91,8 +93,12 @@ func (s *Service) Stop() error {
 	return nil
 }
 
-func freeAddress() (addressInfo, error) {
-	listener, err := net.Listen("tcp", "127.0.0.1:0")
+func freeAddress(debug bool) (addressInfo, error) {
+	host := "0.0.0.0"
+	if debug {
+		host = "127.0.0.1"
+	}
+	listener, err := net.Listen("tcp4", fmt.Sprintf("%s:0", host))
 	if err != nil {
 		return addressInfo{}, err
 	}

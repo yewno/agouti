@@ -3,10 +3,11 @@ package api
 import (
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/sclevine/agouti/api/internal/bus"
+	"github.com/yewno/agouti/api/internal/bus"
 )
 
 type Session struct {
@@ -22,6 +23,7 @@ func Open(url string, capabilities map[string]interface{}) (*Session, error) {
 }
 
 func OpenWithClient(url string, capabilities map[string]interface{}, client *http.Client) (*Session, error) {
+	fmt.Printf("bus url %s\n", url)
 	busClient, err := bus.Connect(url, capabilities, client)
 	if err != nil {
 		return nil, err

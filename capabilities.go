@@ -1,6 +1,9 @@
 package agouti
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // A Capabilities instance defines the desired capabilities the WebDriver
 // should use to configure a Page.
@@ -60,4 +63,10 @@ func (c Capabilities) Without(feature string) Capabilities {
 func (c Capabilities) JSON() (string, error) {
 	capabilitiesJSON, err := json.Marshal(c)
 	return string(capabilitiesJSON), err
+}
+
+// Add PhantomJS Page capability to capabilities settings.
+func (c Capabilities) PhantomPageCapability(key, value string) Capabilities {
+	c[fmt.Sprintf("phantomjs.page.settings.%s", key)] = value
+	return c
 }

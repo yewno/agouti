@@ -6,13 +6,13 @@ import (
 )
 
 type config struct {
+	Proxy               string
 	Timeout             time.Duration
 	DesiredCapabilities Capabilities
 	BrowserName         string
 	RejectInvalidSSL    bool
 	Debug               bool
 	HTTPClient          *http.Client
-	UserAgent           string
 }
 
 // An Option specifies configuration for a new WebDriver or Page.
@@ -22,6 +22,12 @@ type Option func(*config)
 func Browser(name string) Option {
 	return func(c *config) {
 		c.BrowserName = name
+	}
+}
+
+func Proxy(address string) Option {
+	return func(c *config) {
+		c.Proxy = address
 	}
 }
 
@@ -58,14 +64,6 @@ func HTTPClient(client *http.Client) Option {
 	}
 }
 
-// Set useragent where available
-// Currently PhantomJS only
-func UserAgent(agent string) Option {
-	return func(c *config) {
-		c.UserAgent = agent
-	}
-}
-
 func (c config) Merge(options []Option) *config {
 	for _, option := range options {
 		option(&c)
@@ -80,9 +78,6 @@ func (c *config) Capabilities() Capabilities {
 	}
 	if c.BrowserName != "" {
 		merged.Browser(c.BrowserName)
-	}
-	if c.UserAgent != "" {
-		merged["userAgent"] = c.UserAgent
 	}
 	if c.RejectInvalidSSL {
 		merged.Without("acceptSslCerts")
